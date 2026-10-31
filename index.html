@@ -1,275 +1,417 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DustFix — Nettoyage photo</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le Dernier Feu de Noël — Devboard</title>
 <style>
-:root{--bg:#f3f5f9;--panel:#fff;--line:#d9dfea;--text:#111827;--mut:#5b667a;--acc:#7c3aed;--btn:#e5e9f1;--ok:#16a34a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--panel:#172033;--line:#263244;--text:#f1f5f9;--mut:#9aa7ba;--btn:#2b384d;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f1624;--panel:#172033;--line:#263244;--text:#f1f5f9;--mut:#9aa7ba;--btn:#2b384d;color-scheme:dark}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{color-scheme:dark;--bg:#0c1727;--panel:#14243a;--panel2:#192d46;--line:#29415c;--text:#eef5f8;--muted:#9db2c6;--orange:#ff914d;--gold:#f4c752;--green:#63c995;--blue:#64c9e8;--red:#e56b65;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
-[hidden]{display:none!important}
-body{margin:0;height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font:14px system-ui,Arial,sans-serif}
-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
-h1{margin:0;font-size:20px}header p{margin:2px 0 0;color:var(--mut);font-size:12px}
-.row,.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.bar{display:flex;gap:8px 16px;flex-wrap:wrap;padding:8px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
-button,select{border:0;border-radius:8px;padding:8px 11px;background:var(--btn);color:var(--text);font:600 13px system-ui,Arial,sans-serif;cursor:pointer}
-button.primary{background:var(--acc);color:#fff}button.ok{background:var(--ok);color:#fff}
-button:hover:not(:disabled){filter:brightness(1.1)}button:disabled{opacity:.4;cursor:not-allowed}button.on{outline:2px solid var(--acc)}
-label.s{display:flex;gap:6px;align-items:center;color:var(--mut);font-size:12px}
-input[type=range]{width:95px}
-.stage{position:relative;flex:1;min-height:300px;background:#0b0f17;overflow:hidden;touch-action:none}
-canvas{display:block;cursor:crosshair}
-.hint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#9aa7ba;text-align:center;padding:20px;cursor:pointer;border:2px dashed #3b4a63;margin:14px;border-radius:14px}
-.hint.drag{border-color:#8b5cf6;background:#1d2740}.hint b{color:#e5e9f1;font-size:18px}
-footer{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:7px 14px;background:var(--panel);border-top:1px solid var(--line);font-size:12px;color:var(--mut)}
-footer .badge{background:var(--btn);color:var(--text);border-radius:99px;padding:3px 9px}
-.sp{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--acc);animation:r .7s linear infinite;display:none}.sp.on{display:inline-block}
-@keyframes r{to{transform:rotate(360deg)}}
-.keys{margin-left:auto}
+body{margin:0;background:radial-gradient(ellipse at 85% -10%,#254462 0,transparent 38%),var(--bg);color:var(--text);min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.shell{max-width:1240px;margin:auto;padding:30px 24px 70px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#ffb45e,#e65c37);display:grid;place-items:center;font-size:25px;box-shadow:0 8px 30px #ff914d33}
+.eyebrow{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--orange);font-weight:800}
+.brand h1{font-size:18px;margin:3px 0 0;letter-spacing:-.03em}
+.top-actions{display:flex;gap:9px;align-items:center}
+.pill{border:1px solid var(--line);background:#122239;color:var(--muted);padding:8px 12px;border-radius:999px;font-size:12px}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-right:7px}
+.hero{display:flex;justify-content:space-between;align-items:end;gap:25px;margin:34px 0 22px}
+.hero h2{font-size:clamp(30px,5vw,48px);letter-spacing:-.055em;line-height:1.03;margin:8px 0 10px}
+.hero p{color:var(--muted);margin:0;max-width:620px;line-height:1.6}
+.hero-mark{font-size:68px;opacity:.9;filter:drop-shadow(0 10px 24px #ff914d22)}
+.stats{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:13px;margin:24px 0}
+.stat{background:linear-gradient(145deg,#172b43,#122137);border:1px solid var(--line);border-radius:17px;padding:17px 19px;min-height:105px}
+.stat-head{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}
+.stat strong{font-size:27px;letter-spacing:-.04em;display:block;margin-top:8px}
+.progress{height:7px;background:#263b52;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:99px;transition:width .25s}
+.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:26px 0 15px;flex-wrap:wrap}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.filter{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:8px 13px;font-size:12px}
+.filter.active{background:#ff914d1b;border-color:#ff914d77;color:#ffb17c}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#241306}
+.btn:hover{filter:brightness(1.1)}
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.section{background:linear-gradient(160deg,#16283f,#112036);border:1px solid var(--line);border-radius:17px;padding:17px;min-width:0}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}
+.section-title{display:flex;align-items:center;gap:10px}
+.section-icon{width:34px;height:34px;border-radius:10px;background:#ffffff0b;display:grid;place-items:center;font-size:17px}
+.section h3{font-size:15px;margin:0}
+.count{font-size:11px;color:var(--muted);background:#0c192a;padding:5px 8px;border-radius:999px}
+.task-list{display:grid;gap:8px}
+.task{display:grid;grid-template-columns:19px minmax(0,1fr) auto;gap:10px;align-items:start;background:#0e1c2e;border:1px solid #263c55;border-radius:11px;padding:11px 10px;transition:.15s}
+.task:hover{border-color:#49627d}
+.task input{appearance:none;width:17px;height:17px;border:1.5px solid #647b91;border-radius:5px;margin:2px 0 0;cursor:pointer;position:relative}
+.task input:checked{background:var(--green);border-color:var(--green)}
+.task input:checked:after{content:'✓';position:absolute;color:#092218;font-size:13px;font-weight:900;left:2px;top:-1px}
+.task-name{font-size:12px;line-height:1.45;font-weight:650}
+.task.done .task-name{color:#71879c;text-decoration:line-through}
+.task-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:10px;padding:3px 7px;border-radius:999px;background:#20344b;color:#a9bfd2}
+.tag.soso{background:#3a2b23;color:#ffb17c}
+.tag.dev{background:#1b3444;color:#8bd5ef}
+.tag.progress-tag{background:#3b3520;color:#f4d77e}
+.delete{background:transparent;border:0;color:#637b92;font-size:16px;padding:0 3px;opacity:0}
+.task:hover .delete{opacity:1}
+.empty{color:var(--muted);font-size:12px;text-align:center;padding:20px}
+.footer{color:#71879b;font-size:11px;text-align:center;margin-top:27px}
+.add-row{display:grid;grid-template-columns:1fr 130px 120px auto;gap:8px;margin:0 0 15px}
+.add-row input,.add-row select{min-width:0;background:#102137;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--text);font-size:12px}
+.hide{display:none!important}
+@media(max-width:760px){
+.shell{padding:20px 14px 45px}
+.hero-mark{display:none}
+.stats{grid-template-columns:1fr 1fr}
+.stat:first-child{grid-column:1/-1}
+.board{grid-template-columns:1fr}
+.add-row{grid-template-columns:1fr 1fr}
+.add-row input{grid-column:1/-1}
+.top{align-items:flex-start}
+.pill{display:none}
+}
 </style>
 </head>
 <body>
-<header>
-  <div><h1>✨ DustFix</h1><p>Retire les poussières de capteur — 100 % local, rien n’est envoyé sur Internet.</p></div>
-  <div class="row"><button id="open" class="primary">📂 Ouvrir</button><button id="dl" disabled>⬇ Télécharger</button>
-  <select id="fmt" title="Format d’export"><option value="png">PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option></select></div>
+<main class="shell">
+
+<header class="top">
+<div class="brand">
+<div class="logo">🔥</div>
+<div>
+<div class="eyebrow">Espace développement</div>
+<h1>LE DERNIER FEU DE NOËL</h1>
+</div>
+</div>
+<div class="top-actions">
+<span class="pill">
+<span class="status-dot" id="syncDot"></span>
+<span id="syncText">Enregistré sur cet appareil</span>
+</span>
+<button class="btn" id="shareBtn">↗ Partager l'avancement</button>
+</div>
 </header>
-<input id="file" type="file" accept="image/*" hidden>
-<div class="bar">
-  <div class="grp"><button id="auto" class="primary" disabled>Détection automatique</button><button id="apply" class="ok" hidden>✔ Appliquer</button><button id="skip" hidden>Effacer la sélection</button></div>
-  <div class="grp"><button id="undo" disabled title="Ctrl+Z">↶</button><button id="redo" disabled title="Ctrl+Maj+Z">↷</button><button id="cmp" disabled title="Touche C">👁 Original</button><button id="rev" disabled title="Touche R">◐ Révéler</button><button id="reset" disabled>↻ Tout annuler</button></div>
-  <div class="grp">
-    <label class="s">Sensibilité <input id="sens" type="range" min="0" max="100" value="55"></label>
-    <label class="s">Taille max <input id="size" type="range" min="8" max="80" value="30"></label>
-    <label class="s"><input id="both" type="checkbox"> Taches claires</label>
-    <label class="s">Rayon de sélection <input id="brush" type="range" min="3" max="150" value="14"></label>
-  </div>
-  <div class="grp"><button id="zo" disabled>−</button><button id="zi" disabled>+</button><button id="fit" disabled>Ajuster</button><button id="z100" disabled>100 %</button></div>
+
+<section class="hero">
+<div>
+<div class="eyebrow">Tableau de bord · Production</div>
+<h2>On construit<br>quelque chose de grand.</h2>
+<p>Suivez l'avancement du jeu, répartissez les tâches et cochez les étapes au fur et à mesure. Chaque modification compte.</p>
 </div>
-<div class="stage" id="stage">
-  <canvas id="view"></canvas>
-  <label class="hint" id="hint" for="file"><b>Glisse ta photo ici</b><span>ou clique pour choisir une image (tu peux aussi la coller avec Ctrl+V)</span><span>Astuce : « Révéler » accentue le contraste pour voir les poussières dans un ciel uni.</span></label>
+<div class="hero-mark">🎄</div>
+</section>
+
+<section class="stats">
+<div class="stat">
+<div class="stat-head"><span>Progression globale</span><span id="percentLabel">0 %</span></div>
+<strong id="progressCount">0 / 0</strong>
+<div class="progress"><span id="progressBar"></span></div>
 </div>
-<footer>
-  <span class="sp" id="sp"></span><span id="st">Aucune image</span><span class="badge" id="badge">0 correction</span><span id="zl"></span>
-  <span class="keys">Molette : zoom · glisser : déplacer · clic : marquer · reclic : inclure/exclure · Entrée : appliquer · C : original · R : révéler</span>
-</footer>
+<div class="stat">
+<div class="stat-head"><span>Terminées</span><span>✓</span></div>
+<strong id="doneCount">0</strong>
+</div>
+<div class="stat">
+<div class="stat-head"><span>À terminer</span><span>↗</span></div>
+<strong id="todoCount">0</strong>
+</div>
+</section>
+
+<div class="toolbar">
+<div class="filters" id="filters">
+<button class="filter active" data-filter="all">Tout</button>
+<button class="filter" data-filter="todo">À faire</button>
+<button class="filter" data-filter="doing">En cours</button>
+<button class="filter" data-filter="done">Terminées</button>
+<button class="filter" data-filter="Soso">Soso</button>
+<button class="filter" data-filter="Dev 2">Dev 2</button>
+</div>
+<div class="tools">
+<button class="btn" id="exportBtn">↓ Exporter</button>
+<button class="btn primary" id="addBtn">＋ Ajouter une tâche</button>
+</div>
+</div>
+
+<div class="add-row hide" id="addRow">
+<input id="newTask" placeholder="Nouvelle tâche…">
+<select id="newOwner">
+<option>Soso</option>
+<option>Dev 2</option>
+<option>À attribuer</option>
+</select>
+<select id="newCategory">
+<option>Gameplay</option>
+<option>Map & environnement</option>
+<option>Ennemis</option>
+<option>Construction</option>
+<option>Interface</option>
+<option>Audio & finition</option>
+</select>
+<button class="btn primary" id="confirmAdd">Ajouter</button>
+</div>
+
+<section class="board" id="board"></section>
+<div class="footer">LE DERNIER FEU DE NOËL · DEVBOARD <span id="lastUpdate"></span></div>
+</main>
 
 <script>
+const seed=[
+{category:'Map & environnement',icon:'🏔️',tasks:[
+['Créer la map principale : forêt enneigée, camp et maison du Père Noël','Soso'],
+['Créer le camp central et ses zones principales','Dev 2'],
+['Créer le Grand Feu avec lumière et animation','Soso'],
+['Créer les zones de collecte de bois','À attribuer'],
+['Ajouter les décors : sapins, rochers, neige et débris du traîneau','Dev 2']
+]},
+{category:'Gameplay',icon:'🎮',tasks:[
+['Terminer le système d’inventaire','Soso'],
+['Créer le ramassage et le dépôt des cadeaux d’enfants','À attribuer'],
+['Créer l’ouverture des cadeaux du joueur','À attribuer'],
+['Créer la collecte et l’utilisation des ressources','À attribuer'],
+['Créer la vie du Grand Feu : baisse progressive et ravitaillement','Soso'],
+['Créer le cycle jour / nuit','Dev 2']
+]},
+{category:'Ennemis',icon:'❄️',tasks:[
+['Créer le premier Givré (modèle 3D)','Dev 2'],
+['Créer les animations du Givré','À attribuer'],
+['Créer son IA : repérer et rejoindre le Grand Feu','Soso'],
+['Créer les attaques contre le feu','À attribuer'],
+['Créer les vagues et leur difficulté progressive','À attribuer']
+]},
+{category:'Construction',icon:'🛠️',tasks:[
+['Créer l’Établi de fabrication','À attribuer'],
+['Créer le système de placement des pièges et machines','À attribuer'],
+['Créer les câbles et le réseau électrique','À attribuer'],
+['Créer le marchand lutin et son interface','À attribuer'],
+['Créer les plans et améliorations','À attribuer']
+]},
+{category:'Interface',icon:'🧭',tasks:[
+['Créer le HUD : feu, jour/nuit et ressources','À attribuer'],
+['Finaliser l’interface de l’inventaire','Soso'],
+['Ajouter les retours visuels de la télécommande','À attribuer'],
+['Créer les écrans de victoire et de défaite','À attribuer']
+]},
+{category:'Audio & finition',icon:'✨',tasks:[
+['Ajouter les sons du Grand Feu et des interactions','À attribuer'],
+['Ajouter les ambiances de forêt et de nuit','À attribuer'],
+['Ajouter les effets météo et tempêtes de neige','À attribuer'],
+['Ajouter les effets visuels des ennemis et machines','À attribuer']
+]}
+];
+
+let state={tasks:[],filter:'all'};
 const $=id=>document.getElementById(id);
-const view=$("view"),vx=view.getContext("2d"),stage=$("stage");
-let work=null,wx=null,orig=null,fname="photo";
-let Z=1,PX=0,PY=0,fitZ=1,cw=300,ch=300,DPR=1;
-let hist=[],redo=[],spots=[],corr=0,showOrig=false,reveal=false,mouse=null,busy=false,reviewing=false;
+const KEY='dernier-feu-devboard-v1';
 
-/* ---------- affichage ---------- */
-let raf=0;function draw(){if(!raf)raf=requestAnimationFrame(render)}
-function resize(){const r=stage.getBoundingClientRect();DPR=window.devicePixelRatio||1;cw=r.width;ch=r.height;view.width=Math.round(cw*DPR);view.height=Math.round(ch*DPR);view.style.width=cw+"px";view.style.height=ch+"px";draw()}
-new ResizeObserver(resize).observe(stage);
+function init(){
+try{
+const shared=location.hash.startsWith('#data=')
+?JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(6)))))
+:null;
+const saved=JSON.parse(localStorage.getItem(KEY));
+
+if(shared&&Array.isArray(shared.tasks)){
+state.tasks=shared.tasks;
+localStorage.setItem(KEY,JSON.stringify({tasks:state.tasks}));
+history.replaceState(null,'',location.pathname+location.search);
+}else if(saved?.tasks?.length){
+state.tasks=saved.tasks;
+}else{
+resetSeed();
+}
+}catch{
+resetSeed();
+}
+render();
+}
+
+function resetSeed(){
+state.tasks=seed.flatMap((g,gi)=>
+g.tasks.map((t,i)=>({
+id:`${gi}-${i}`,
+category:g.category,
+icon:g.icon,
+name:t[0],
+owner:t[1],
+status:'todo'
+}))
+);
+}
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify({tasks:state.tasks}));
+$('lastUpdate').textContent='· Mis à jour à '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+render();
+}
+
 function render(){
-  raf=0;vx.setTransform(DPR,0,0,DPR,0,0);vx.clearRect(0,0,cw,ch);if(!work)return;
-  vx.imageSmoothingEnabled=Z<2;vx.imageSmoothingQuality="high";
-  vx.filter=reveal?"grayscale(1) contrast(2.6) brightness(1.2)":"none";
-  vx.drawImage(showOrig?orig:work,PX,PY,work.width*Z,work.height*Z);vx.filter="none";
-  for(const s of spots){const r=Math.max(6,s.r*Z+3);vx.beginPath();vx.arc(PX+s.x*Z,PY+s.y*Z,r,0,7);vx.lineWidth=2;vx.setLineDash(s.on?[]:[4,4]);vx.strokeStyle=s.on?"#22c55e":"#ef4444";vx.stroke()}
-  vx.setLineDash([]);
-  if(mouse&&!busy){const r=Math.max(2,+$("brush").value*Z);vx.beginPath();vx.arc(mouse.x,mouse.y,r,0,7);vx.lineWidth=3;vx.strokeStyle="rgba(0,0,0,.6)";vx.stroke();vx.lineWidth=1.2;vx.strokeStyle="#fff";vx.stroke()}
-}
-function fit(){if(!work)return;fitZ=Math.min(cw/work.width,ch/work.height)*.96;Z=fitZ;PX=(cw-work.width*Z)/2;PY=(ch-work.height*Z)/2;sync();draw()}
-function zoomAt(x,y,nz){nz=Math.min(40,Math.max(Math.min(fitZ,.05)*.9,nz));PX=x-(x-PX)*nz/Z;PY=y-(y-PY)*nz/Z;Z=nz;sync();draw()}
+const total=state.tasks.length;
+const done=state.tasks.filter(t=>t.status==='done').length;
+const pct=total?Math.round(done/total*100):0;
 
-/* ---------- état de l’interface ---------- */
-function status(t,b){$("st").textContent=t;$("sp").classList.toggle("on",!!b)}
-function sync(){
-  const has=!!work;
-  ["auto","cmp","rev","reset","dl","zo","zi","fit","z100"].forEach(i=>$(i).disabled=!has||busy);
-  $("undo").disabled=!hist.length||busy;$("redo").disabled=!redo.length||busy;
-  $("badge").textContent=corr+" correction"+(corr>1?"s":"");
-  $("zl").textContent=has?`${work.width}×${work.height} px · ${Math.round(Z*100)} %`:"";
-  const n=spots.filter(s=>s.on).length;
-  $("apply").hidden=$("skip").hidden=!reviewing;$("apply").textContent=`✔ Appliquer (${n})`;$("apply").disabled=!n||busy;
-  $("rev").classList.toggle("on",reveal);
-}
+$('progressCount').textContent=`${done} / ${total}`;
+$('percentLabel').textContent=pct+' %';
+$('progressBar').style.width=pct+'%';
+$('doneCount').textContent=done;
+$('todoCount').textContent=total-done;
 
-/* ---------- chargement ---------- */
-async function load(file){
-  if(!file||!file.type.startsWith("image/"))return;
-  status("Chargement…",1);let bmp;
-  try{bmp=await createImageBitmap(file,{imageOrientation:"from-image"})}
-  catch(e){try{bmp=await new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=URL.createObjectURL(file)})}catch(e2){status("Image illisible");return}}
-  work=document.createElement("canvas");work.width=bmp.width;work.height=bmp.height;
-  wx=work.getContext("2d",{willReadFrequently:true});wx.drawImage(bmp,0,0);
-  orig=document.createElement("canvas");orig.width=work.width;orig.height=work.height;orig.getContext("2d").drawImage(work,0,0);
-  fname=(file.name||"photo").replace(/\.[^.]+$/,"")||"photo";
-  hist=[];redo=[];spots=[];corr=0;reviewing=false;reveal=false;
-  $("brush").value=Math.min(150,Math.max(6,Math.round(Math.max(work.width,work.height)/300)));
-  $("hint").hidden=true;resize();fit();status("Photo chargée : clique sur les taches pour les marquer, puis sur Appliquer. Ajuste le rayon pour couvrir chaque tache.");
-}
-$("open").onclick=()=>$("file").click();
-$("file").onchange=e=>{load(e.target.files[0]);e.target.value=""};
-["dragenter","dragover"].forEach(ev=>window.addEventListener(ev,e=>{e.preventDefault();$("hint").classList.add("drag")}));
-["dragleave","drop"].forEach(ev=>window.addEventListener(ev,e=>{e.preventDefault();$("hint").classList.remove("drag")}));
-window.addEventListener("drop",e=>load(e.dataTransfer.files[0]));
-window.addEventListener("paste",e=>{const f=[...(e.clipboardData?.files||[])][0];if(f)load(f)});
+const groups=[...new Set(state.tasks.map(t=>t.category))];
 
-/* ---------- reconstruction par patchs (outside-in, avec correction de dégradé) ---------- */
-function heal(cx,cy,r){
-  r=Math.max(3,r);const W=work.width,H=work.height,pr=2;
-  const fe=Math.max(2,Math.round(r*.2)),Rh=r+fe;
-  const sr=Math.round(Math.min(Math.max(Rh*2.5+16,30),90));
-  const x0=Math.max(0,Math.floor(cx-sr)),y0=Math.max(0,Math.floor(cy-sr)),x1=Math.min(W,Math.ceil(cx+sr)+1),y1=Math.min(H,Math.ceil(cy+sr)+1);
-  const w=x1-x0,h=y1-y0;if(w<2*pr+4||h<2*pr+4)return null;
-  const id=wx.getImageData(x0,y0,w,h),d=id.data,before=new ImageData(new Uint8ClampedArray(d),w,h);
-  const lx=cx-x0,ly=cy-y0,R2=Rh*Rh,buf=new Float32Array(w*h*3),known=new Uint8Array(w*h),tg=[];
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,dx=x-lx,dy=y-ly,q=dx*dx+dy*dy;
-    buf[i*3]=d[i*4];buf[i*3+1]=d[i*4+1];buf[i*3+2]=d[i*4+2];
-    if(q>R2)known[i]=1;else tg.push([x,y,q])}
-  if(!tg.length)return null;
-  const cand=[],rin=Rh+pr*1.5+1,stride=Math.max(1,Math.round(Math.sqrt(w*h/600)));
-  for(let sy=pr;sy<h-pr;sy+=stride)for(let sx=pr;sx<w-pr;sx+=stride){const dx=sx-lx,dy=sy-ly;if(dx*dx+dy*dy>rin*rin)cand.push(sy*w+sx)}
-  if(!cand.length)return null;
-  tg.sort((a,b)=>b[2]-a[2]); // du bord vers le centre
-  for(const [tx,ty] of tg){
-    let best=1e30,bi=-1,o0=0,o1=0,o2=0;
-    for(let k=0;k<cand.length;k++){
-      const c=cand[k];let n=0,s0=0,s1=0,s2=0,q=0;
-      for(let py=-pr;py<=pr;py++){const yy=ty+py;if(yy<0||yy>=h)continue;
-        for(let px=-pr;px<=pr;px++){const xx=tx+px;if(xx<0||xx>=w)continue;const ti=yy*w+xx;if(!known[ti])continue;
-          const a=ti*3,b=(c+py*w+px)*3,d0=buf[a]-buf[b],d1=buf[a+1]-buf[b+1],d2=buf[a+2]-buf[b+2];
-          s0+=d0;s1+=d1;s2+=d2;q+=d0*d0+d1*d1+d2*d2;n++}}
-      if(n<3)continue;
-      const sc=(q-(s0*s0+s1*s1+s2*s2)/n*.7)/n;
-      if(sc<best){best=sc;bi=c;o0=s0/n;o1=s1/n;o2=s2/n}
-    }
-    const ti=(ty*w+tx)*3;
-    if(bi>=0){const b=bi*3;buf[ti]=buf[b]+o0;buf[ti+1]=buf[b+1]+o1;buf[ti+2]=buf[b+2]+o2}
-    known[ty*w+tx]=1;
-  }
-  for(const [x,y,q] of tg){const dist=Math.sqrt(q),bl=dist<=r?1:(Rh-dist)/fe;if(bl<=0)continue;const i=(y*w+x)*4,b=(y*w+x)*3;
-    d[i]=d[i]*(1-bl)+buf[b]*bl;d[i+1]=d[i+1]*(1-bl)+buf[b+1]*bl;d[i+2]=d[i+2]*(1-bl)+buf[b+2]*bl}
-  wx.putImageData(id,x0,y0);
-  return {x:x0,y:y0,w,h,before,after:null};
-}
-const tick=()=>new Promise(r=>setTimeout(r,0));
-async function healMany(list){
-  busy=true;sync();const done=[];
-  for(let i=0;i<list.length;i++){
-    status(`Reconstruction ${i+1}/${list.length}…`,1);await tick();
-    const p=heal(list[i].x,list[i].y,list[i].r);if(p){done.push(p);draw()}
-  }
-  busy=false;
-  if(done.length){hist.push(done);if(hist.length>40)hist.shift();redo=[];corr+=done.length}
-  status(done.length?`${done.length} poussière(s) retirée(s)`:"Rien à corriger ici");sync();draw();
-}
-function undo(){const e=hist.pop();if(!e||busy)return;
-  const a=[];for(const p of e.slice().reverse()){a.push({p,cur:wx.getImageData(p.x,p.y,p.w,p.h)});wx.putImageData(p.before,p.x,p.y)}
-  e.cur=a;redo.push(e);corr-=e.length;sync();draw();status("Annulé")}
-function redoF(){const e=redo.pop();if(!e||busy)return;
-  for(const {p,cur} of e.cur.slice().reverse())wx.putImageData(cur,p.x,p.y);
-  hist.push(e);corr+=e.length;sync();draw();status("Rétabli")}
-$("undo").onclick=undo;$("redo").onclick=redoF;
-$("reset").onclick=()=>{if(!work||busy)return;wx.drawImage(orig,0,0);hist=[];redo=[];corr=0;spots=[];reviewing=false;sync();draw();status("Photo originale restaurée")};
-
-/* ---------- détection : écart au fond local + composantes connexes ---------- */
-function detect(){
-  const maxS=+$("size").value,T=52-.45*+$("sens").value,both=$("both").checked;
-  const sc=Math.min(1,1600/Math.max(work.width,work.height)),w=Math.round(work.width*sc),h=Math.round(work.height*sc);
-  const t=document.createElement("canvas");t.width=w;t.height=h;const tx=t.getContext("2d",{willReadFrequently:true});tx.drawImage(work,0,0,w,h);
-  const px=tx.getImageData(0,0,w,h).data,g=new Float32Array(w*h);
-  for(let i=0,j=0;i<g.length;i++,j+=4)g[i]=.299*px[j]+.587*px[j+1]+.114*px[j+2];
-  const W1=w+1,I=new Float64Array(W1*(h+1));
-  for(let y=0;y<h;y++){let row=0;for(let x=0;x<w;x++){row+=g[y*w+x];I[(y+1)*W1+x+1]=I[y*W1+x+1]+row}}
-  const box=(x,y,r)=>{const a=Math.max(0,x-r),b=Math.max(0,y-r),c=Math.min(w,x+r+1),e=Math.min(h,y+r+1);return(I[e*W1+c]-I[b*W1+c]-I[e*W1+a]+I[b*W1+a])/((c-a)*(e-b))};
-  const R=Math.round(maxS*.8)+6,diff=new Float32Array(w*h);
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++)diff[y*w+x]=box(x,y,R)-box(x,y,1);
-  const out=[],stack=new Int32Array(w*h);
-  for(const sg of both?[1,-1]:[1]){
-    const vis=new Uint8Array(w*h);
-    for(let i0=0;i0<w*h;i0++){
-      if(vis[i0]||sg*diff[i0]<=T)continue;
-      let sp=0,n=0,sx=0,sy=0,sd=0,mnx=w,mny=h,mxx=0,mxy=0;stack[sp++]=i0;vis[i0]=1;
-      while(sp){const i=stack[--sp],x=i%w,y=(i-x)/w;n++;sx+=x;sy+=y;sd+=sg*diff[i];
-        if(x<mnx)mnx=x;if(x>mxx)mxx=x;if(y<mny)mny=y;if(y>mxy)mxy=y;
-        if(x>0&&!vis[i-1]&&sg*diff[i-1]>T){vis[i-1]=1;stack[sp++]=i-1}
-        if(x<w-1&&!vis[i+1]&&sg*diff[i+1]>T){vis[i+1]=1;stack[sp++]=i+1}
-        if(y>0&&!vis[i-w]&&sg*diff[i-w]>T){vis[i-w]=1;stack[sp++]=i-w}
-        if(y<h-1&&!vis[i+w]&&sg*diff[i+w]>T){vis[i+w]=1;stack[sp++]=i+w}}
-      const bw=mxx-mnx+1,bh=mxy-mny+1;
-      if(n<3||Math.max(bw,bh)>maxS||n/(bw*bh)<.3||Math.max(bw,bh)/Math.min(bw,bh)>5)continue;
-      const cx=sx/n,cy=sy/n,rad=Math.hypot(bw,bh)/2,cm=sd/n;
-      let rm=0;for(let k=0;k<12;k++){const a=k*Math.PI/6,xx=Math.min(w-1,Math.max(0,Math.round(cx+Math.cos(a)*(rad+4)))),yy=Math.min(h-1,Math.max(0,Math.round(cy+Math.sin(a)*(rad+4))));rm+=sg*diff[yy*w+xx]}
-      if(rm/12>.4*cm)continue; // zone sombre étendue, pas une poussière isolée
-      out.push({x:cx/sc,y:cy/sc,r:(rad+3)/sc,on:true,score:cm});
-    }
-  }
-  return out.sort((a,b)=>b.score-a.score).slice(0,120);
-}
-function runDetect(){
-  if(!work||busy)return;busy=true;sync();status("Analyse de l’image…",1);
-  setTimeout(()=>{spots=[...spots.filter(s=>s.manual),...detect()];busy=false;reviewing=spots.length>0;
-    status(spots.length?`${spots.length} poussière(s) repérée(s) — clique sur un cercle pour l’exclure, puis « Appliquer »`:"Aucune poussière évidente : augmente la sensibilité ou clique à la main");
-    sync();draw()},30);
-}
-$("auto").onclick=runDetect;
-$("apply").onclick=async()=>{const l=spots.filter(s=>s.on);spots=[];reviewing=false;await healMany(l)};
-$("skip").onclick=()=>{spots=[];reviewing=false;sync();draw();status("Sélection effacée")};
-let dt;["sens","size","both"].forEach(i=>$(i).addEventListener("input",()=>{if(!spots.some(s=>!s.manual))return;clearTimeout(dt);dt=setTimeout(runDetect,250)}));
-$("brush").addEventListener("input",draw);
-
-/* ---------- interactions : souris, tactile, pinch ---------- */
-const ptr=new Map();let tap=null,pinch=null;
-const pos=e=>{const r=view.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
-const pdata=()=>{const [a,b]=[...ptr.values()];return{d:Math.hypot(a.x-b.x,a.y-b.y)||1,x:(a.x+b.x)/2,y:(a.y+b.y)/2}};
-view.addEventListener("pointerdown",e=>{if(!work)return;view.setPointerCapture(e.pointerId);const p=pos(e);ptr.set(e.pointerId,p);
-  if(ptr.size===1)tap={x:p.x,y:p.y,px:PX,py:PY,moved:false};else{if(tap)tap.moved=true;pinch=pdata()}});
-view.addEventListener("pointermove",e=>{const p=pos(e);
-  if(e.pointerType==="mouse"){mouse=p;draw()}
-  if(!ptr.has(e.pointerId))return;ptr.set(e.pointerId,p);
-  if(ptr.size===2&&pinch){const n=pdata();zoomAt(n.x,n.y,Z*n.d/pinch.d);PX+=n.x-pinch.x;PY+=n.y-pinch.y;pinch=n;draw()}
-  else if(ptr.size===1&&tap){if(Math.hypot(p.x-tap.x,p.y-tap.y)>5)tap.moved=true;if(tap.moved){PX=tap.px+p.x-tap.x;PY=tap.py+p.y-tap.y;draw()}}});
-const endP=e=>{if(!ptr.has(e.pointerId))return;const p=pos(e);
-  if(ptr.size===1&&tap&&!tap.moved&&e.type==="pointerup")clickAt(p.x,p.y);
-  ptr.delete(e.pointerId);if(!ptr.size)tap=null;pinch=null;
-  if(ptr.size===1){const q=[...ptr.values()][0];tap={x:q.x,y:q.y,px:PX,py:PY,moved:true}}};
-view.addEventListener("pointerup",endP);view.addEventListener("pointercancel",endP);
-view.addEventListener("pointerleave",e=>{if(e.pointerType==="mouse"){mouse=null;draw()}});
-view.addEventListener("wheel",e=>{if(!work)return;e.preventDefault();const p=pos(e);zoomAt(p.x,p.y,Z*Math.exp(-e.deltaY*.0015))},{passive:false});
-function clickAt(x,y){
-  if(!work||busy)return;const ix=(x-PX)/Z,iy=(y-PY)/Z;
-  if(ix<0||iy<0||ix>=work.width||iy>=work.height)return;
-  if(spots.length){const s=spots.find(s=>Math.hypot(s.x-ix,s.y-iy)<=Math.max(s.r,12/Z));if(s){s.on=!s.on;sync();draw();return}}
-  spots.push({x:ix,y:iy,r:+$("brush").value,on:true,manual:true});
-  reviewing=true;
-  status("Tache marquée : continue la sélection, puis clique sur Appliquer. Reclique sur un cercle pour l’exclure.");
-  sync();draw();
-}
-
-/* ---------- comparaison, révélation, zoom, export ---------- */
-const cmpOn=v=>{if(!work)return;showOrig=v;draw()};
-$("cmp").addEventListener("pointerdown",()=>cmpOn(true));["pointerup","pointerleave","pointercancel"].forEach(ev=>$("cmp").addEventListener(ev,()=>cmpOn(false)));
-const togRev=()=>{if(!work)return;reveal=!reveal;sync();draw()};$("rev").onclick=togRev;
-$("zi").onclick=()=>zoomAt(cw/2,ch/2,Z*1.4);$("zo").onclick=()=>zoomAt(cw/2,ch/2,Z/1.4);
-$("fit").onclick=fit;$("z100").onclick=()=>zoomAt(cw/2,ch/2,1);
-$("dl").onclick=()=>{if(!work)return;const f=$("fmt").value;status("Export…",1);
-  work.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`${fname}-dustfix.${f==="jpeg"?"jpg":f}`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);status("Fichier exporté")},"image/"+f,.95)};
-window.addEventListener("keydown",e=>{
-  if(!work||e.target.tagName==="SELECT")return;const k=e.key.toLowerCase(),m=e.ctrlKey||e.metaKey;
-  if(m&&k==="z"){e.preventDefault();e.shiftKey?redoF():undo()}
-  else if(m&&k==="y"){e.preventDefault();redoF()}
-  else if(m)return;
-  else if(k==="c"&&!e.repeat)cmpOn(true);
-  else if(k==="r"&&!e.repeat)togRev();
-  else if(k==="["||k==="]"){const b=$("brush");b.value=Math.max(3,Math.min(150,+b.value*(k==="]"?1.2:1/1.2)));draw()}
-  else if(k==="0")fit();else if(k==="1")zoomAt(cw/2,ch/2,1);
-  else if(k==="enter"&&reviewing)$("apply").click();
-  else if(k==="escape"&&reviewing)$("skip").click();
+$('board').innerHTML=groups.map(cat=>{
+const items=state.tasks.filter(t=>t.category===cat).filter(t=>{
+const f=state.filter;
+return f==='all'||
+(f==='todo'&&t.status==='todo')||
+(f==='doing'&&t.status==='doing')||
+(f==='done'&&t.status==='done')||
+t.owner===f;
 });
-window.addEventListener("keyup",e=>{if(e.key.toLowerCase()==="c")cmpOn(false)});
-resize();sync();
+
+const all=state.tasks.filter(t=>t.category===cat);
+if(!items.length)return '';
+
+const icon=all[0]?.icon||'📌';
+
+return `<article class="section">
+<div class="section-head">
+<div class="section-title">
+<div class="section-icon">${icon}</div>
+<h3>${cat}</h3>
+</div>
+<span class="count">${all.filter(t=>t.status==='done').length}/${all.length}</span>
+</div>
+<div class="task-list">
+${items.map(t=>`
+<div class="task ${t.status==='done'?'done':''}">
+<input type="checkbox" aria-label="Terminer ${escapeHtml(t.name)}" ${t.status==='done'?'checked':''} data-check="${t.id}">
+<div>
+<div class="task-name">${escapeHtml(t.name)}</div>
+<div class="task-meta">
+<span class="tag ${t.owner==='Soso'?'soso':t.owner==='Dev 2'?'dev':''}">${escapeHtml(t.owner)}</span>
+<select class="tag" data-status="${t.id}" aria-label="Statut" style="border:0">
+<option value="todo" ${t.status==='todo'?'selected':''}>À faire</option>
+<option value="doing" ${t.status==='doing'?'selected':''}>En cours</option>
+<option value="done" ${t.status==='done'?'selected':''}>Terminé</option>
+</select>
+</div>
+</div>
+<button class="delete" data-delete="${t.id}" title="Supprimer">×</button>
+</div>`).join('')}
+</div>
+</article>`;
+}).join('')||'<div class="empty">Aucune tâche dans ce filtre.</div>';
+
+document.querySelectorAll('[data-check]').forEach(el=>
+el.addEventListener('change',()=>{
+const t=state.tasks.find(x=>x.id===el.dataset.check);
+if(t){
+t.status=el.checked?'done':'todo';
+save();
+}
+})
+);
+
+document.querySelectorAll('[data-status]').forEach(el=>
+el.addEventListener('change',()=>{
+const t=state.tasks.find(x=>x.id===el.dataset.status);
+if(t){
+t.status=el.value;
+save();
+}
+})
+);
+
+document.querySelectorAll('[data-delete]').forEach(el=>
+el.addEventListener('click',()=>{
+if(confirm('Supprimer cette tâche ?')){
+state.tasks=state.tasks.filter(t=>t.id!==el.dataset.delete);
+save();
+}
+})
+);
+}
+
+function escapeHtml(s){
+return String(s).replace(/[&<>"']/g,c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+}[c]));
+}
+
+$('filters').addEventListener('click',e=>{
+const b=e.target.closest('[data-filter]');
+if(!b)return;
+state.filter=b.dataset.filter;
+document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));
+render();
+});
+
+$('addBtn').onclick=()=>$('addRow').classList.toggle('hide');
+
+$('confirmAdd').onclick=()=>{
+const name=$('newTask').value.trim();
+if(!name)return;
+
+const cat=$('newCategory').value;
+const icons={
+'Gameplay':'🎮',
+'Map & environnement':'🏔️',
+'Ennemis':'❄️',
+'Construction':'🛠️',
+'Interface':'🧭',
+'Audio & finition':'✨'
+};
+
+state.tasks.push({
+id:'custom-'+Date.now(),
+category:cat,
+icon:icons[cat]||'📌',
+name,
+owner:$('newOwner').value,
+status:'todo'
+});
+
+$('newTask').value='';
+$('addRow').classList.add('hide');
+save();
+};
+
+$('newTask').addEventListener('keydown',e=>{
+if(e.key==='Enter')$('confirmAdd').click();
+});
+
+$('exportBtn').onclick=()=>{
+const blob=new Blob([JSON.stringify(state.tasks,null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='dernier-feu-checklist.json';
+a.click();
+URL.revokeObjectURL(a.href);
+};
+
+$('shareBtn').onclick=async()=>{
+try{
+const payload=btoa(unescape(encodeURIComponent(JSON.stringify({tasks:state.tasks}))));
+const link=location.href.split('#')[0]+'#data='+payload;
+await navigator.clipboard.writeText(link);
+$('shareBtn').textContent='Lien copié ✓';
+$('syncText').textContent='Lien prêt à partager';
+setTimeout(()=>$('shareBtn').textContent="↗ Partager l'avancement",2200);
+}catch{
+$('shareBtn').textContent='Copie indisponible';
+}
+};
+
+init();
 </script>
 </body>
 </html>
