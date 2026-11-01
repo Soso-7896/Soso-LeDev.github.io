@@ -1,417 +1,166 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Dernier Feu de Noël — Devboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contrat de réconciliation</title>
 <style>
-:root{color-scheme:dark;--bg:#0c1727;--panel:#14243a;--panel2:#192d46;--line:#29415c;--text:#eef5f8;--muted:#9db2c6;--orange:#ff914d;--gold:#f4c752;--green:#63c995;--blue:#64c9e8;--red:#e56b65;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+:root{--bg:#fff4f0;--card:#fff;--ink:#3a2a2e;--mut:#8a7378;--acc:#e8506a;--acc2:#ffd9df;--line:#f0d5da;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1417;--card:#2a1d21;--ink:#f6e8ea;--mut:#b99ea4;--acc:#ff7b92;--acc2:#4a2a31;--line:#443036;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1417;--card:#2a1d21;--ink:#f6e8ea;--mut:#b99ea4;--acc:#ff7b92;--acc2:#4a2a31;--line:#443036;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 85% -10%,#254462 0,transparent 38%),var(--bg);color:var(--text);min-height:100vh}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.shell{max-width:1240px;margin:auto;padding:30px 24px 70px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}
-.brand{display:flex;align-items:center;gap:13px}
-.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#ffb45e,#e65c37);display:grid;place-items:center;font-size:25px;box-shadow:0 8px 30px #ff914d33}
-.eyebrow{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--orange);font-weight:800}
-.brand h1{font-size:18px;margin:3px 0 0;letter-spacing:-.03em}
-.top-actions{display:flex;gap:9px;align-items:center}
-.pill{border:1px solid var(--line);background:#122239;color:var(--muted);padding:8px 12px;border-radius:999px;font-size:12px}
-.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-right:7px}
-.hero{display:flex;justify-content:space-between;align-items:end;gap:25px;margin:34px 0 22px}
-.hero h2{font-size:clamp(30px,5vw,48px);letter-spacing:-.055em;line-height:1.03;margin:8px 0 10px}
-.hero p{color:var(--muted);margin:0;max-width:620px;line-height:1.6}
-.hero-mark{font-size:68px;opacity:.9;filter:drop-shadow(0 10px 24px #ff914d22)}
-.stats{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:13px;margin:24px 0}
-.stat{background:linear-gradient(145deg,#172b43,#122137);border:1px solid var(--line);border-radius:17px;padding:17px 19px;min-height:105px}
-.stat-head{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}
-.stat strong{font-size:27px;letter-spacing:-.04em;display:block;margin-top:8px}
-.progress{height:7px;background:#263b52;border-radius:99px;overflow:hidden;margin-top:10px}
-.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:99px;transition:width .25s}
-.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:26px 0 15px;flex-wrap:wrap}
-.filters{display:flex;gap:7px;flex-wrap:wrap}
-.filter{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:8px 13px;font-size:12px}
-.filter.active{background:#ff914d1b;border-color:#ff914d77;color:#ffb17c}
-.tools{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700}
-.btn.primary{background:var(--orange);border-color:var(--orange);color:#241306}
-.btn:hover{filter:brightness(1.1)}
-.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.section{background:linear-gradient(160deg,#16283f,#112036);border:1px solid var(--line);border-radius:17px;padding:17px;min-width:0}
-.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}
-.section-title{display:flex;align-items:center;gap:10px}
-.section-icon{width:34px;height:34px;border-radius:10px;background:#ffffff0b;display:grid;place-items:center;font-size:17px}
-.section h3{font-size:15px;margin:0}
-.count{font-size:11px;color:var(--muted);background:#0c192a;padding:5px 8px;border-radius:999px}
-.task-list{display:grid;gap:8px}
-.task{display:grid;grid-template-columns:19px minmax(0,1fr) auto;gap:10px;align-items:start;background:#0e1c2e;border:1px solid #263c55;border-radius:11px;padding:11px 10px;transition:.15s}
-.task:hover{border-color:#49627d}
-.task input{appearance:none;width:17px;height:17px;border:1.5px solid #647b91;border-radius:5px;margin:2px 0 0;cursor:pointer;position:relative}
-.task input:checked{background:var(--green);border-color:var(--green)}
-.task input:checked:after{content:'✓';position:absolute;color:#092218;font-size:13px;font-weight:900;left:2px;top:-1px}
-.task-name{font-size:12px;line-height:1.45;font-weight:650}
-.task.done .task-name{color:#71879c;text-decoration:line-through}
-.task-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:6px}
-.tag{font-size:10px;padding:3px 7px;border-radius:999px;background:#20344b;color:#a9bfd2}
-.tag.soso{background:#3a2b23;color:#ffb17c}
-.tag.dev{background:#1b3444;color:#8bd5ef}
-.tag.progress-tag{background:#3b3520;color:#f4d77e}
-.delete{background:transparent;border:0;color:#637b92;font-size:16px;padding:0 3px;opacity:0}
-.task:hover .delete{opacity:1}
-.empty{color:var(--muted);font-size:12px;text-align:center;padding:20px}
-.footer{color:#71879b;font-size:11px;text-align:center;margin-top:27px}
-.add-row{display:grid;grid-template-columns:1fr 130px 120px auto;gap:8px;margin:0 0 15px}
-.add-row input,.add-row select{min-width:0;background:#102137;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--text);font-size:12px}
-.hide{display:none!important}
-@media(max-width:760px){
-.shell{padding:20px 14px 45px}
-.hero-mark{display:none}
-.stats{grid-template-columns:1fr 1fr}
-.stat:first-child{grid-column:1/-1}
-.board{grid-template-columns:1fr}
-.add-row{grid-template-columns:1fr 1fr}
-.add-row input{grid-column:1/-1}
-.top{align-items:flex-start}
-.pill{display:none}
-}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.5;padding:16px;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto}
+.card{background:var(--card);border:2px dashed var(--line);border-radius:18px;padding:22px 18px;box-shadow:0 6px 24px rgba(232,80,106,.12)}
+h1{font-size:1.6rem;text-align:center;margin:0 0 4px;color:var(--acc)}
+.sub{text-align:center;color:var(--mut);font-size:.9rem;margin:0 0 18px}
+h2{font-size:1rem;margin:22px 0 8px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-family:system-ui,sans-serif}
+p{margin:6px 0}
+.names{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=text]{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--ink);font:inherit;font-size:1rem}
+.price{background:var(--acc2);border-radius:14px;padding:14px;text-align:center;font-size:1.1rem}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-of-type{border-bottom:0}
+.lbl{font-family:system-ui,sans-serif;font-weight:600}
+.items{min-height:34px;font-size:1.5rem;word-break:break-all}
+.ctrl{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.n{min-width:26px;text-align:center;font:700 1.3rem system-ui,sans-serif}
+.btn{width:52px;height:52px;border-radius:50%;border:0;background:var(--acc);color:#fff;font:700 1.6rem system-ui,sans-serif;touch-action:manipulation;cursor:pointer}
+.btn.minus{background:var(--acc2);color:var(--acc)}
+.slot{width:52px;height:52px;position:relative}
+.btn.run{position:fixed;z-index:50;transition:left .18s ease-out,top .18s ease-out;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#msg{min-height:22px;text-align:center;font-family:system-ui,sans-serif;font-size:.9rem;color:var(--acc);margin-top:8px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.sbtn{padding:16px 8px;border:2px dashed var(--line);border-radius:14px;background:transparent;color:var(--ink);font:inherit;font-size:1rem;cursor:pointer;touch-action:manipulation;min-height:70px}
+.sbtn.ok{border-style:solid;border-color:var(--acc);background:var(--acc2);font-style:italic}
+#done{display:none;margin-top:18px;text-align:center;background:var(--acc);color:#fff;border-radius:14px;padding:16px;font-size:1.05rem}
+.foot{text-align:center;color:var(--mut);font-size:.8rem;margin-top:14px}
 </style>
 </head>
 <body>
-<main class="shell">
+<div class="wrap">
+<div class="card">
+  <h1>📜 Contrat de réconciliation</h1>
+  <p class="sub">Document officiel, très important, signé de bon cœur</p>
 
-<header class="top">
-<div class="brand">
-<div class="logo">🔥</div>
-<div>
-<div class="eyebrow">Espace développement</div>
-<h1>LE DERNIER FEU DE NOËL</h1>
-</div>
-</div>
-<div class="top-actions">
-<span class="pill">
-<span class="status-dot" id="syncDot"></span>
-<span id="syncText">Enregistré sur cet appareil</span>
-</span>
-<button class="btn" id="shareBtn">↗ Partager l'avancement</button>
-</div>
-</header>
+  <h2>Les parties</h2>
+  <div class="names">
+    <input type="text" id="n1" value="Soan" placeholder="Prénom du fautif" aria-label="Prénom du fautif">
+    <input type="text" id="n2" placeholder="Prénom du vexé" aria-label="Prénom du vexé">
+  </div>
 
-<section class="hero">
-<div>
-<div class="eyebrow">Tableau de bord · Production</div>
-<h2>On construit<br>quelque chose de grand.</h2>
-<p>Suivez l'avancement du jeu, répartissez les tâches et cochez les étapes au fur et à mesure. Chaque modification compte.</p>
-</div>
-<div class="hero-mark">🎄</div>
-</section>
+  <h2>Article 1 : le tarif du pardon</h2>
+  <p class="price">1 sticker 🌟 + 1 gros câlin 🤗</p>
+  <p style="color:var(--mut);font-size:.9rem">Le tarif peut être ajusté d’un commun accord, avec les boutons ci-dessous.</p>
 
-<section class="stats">
-<div class="stat">
-<div class="stat-head"><span>Progression globale</span><span id="percentLabel">0 %</span></div>
-<strong id="progressCount">0 / 0</strong>
-<div class="progress"><span id="progressBar"></span></div>
-</div>
-<div class="stat">
-<div class="stat-head"><span>Terminées</span><span>✓</span></div>
-<strong id="doneCount">0</strong>
-</div>
-<div class="stat">
-<div class="stat-head"><span>À terminer</span><span>↗</span></div>
-<strong id="todoCount">0</strong>
-</div>
-</section>
+  <h2>Article 2 : la facture</h2>
+  <div class="row">
+    <div><div class="lbl">Stickers</div><div class="items" id="si"></div></div>
+    <div class="ctrl">
+      <button class="btn minus" id="sm" aria-label="Moins de stickers">−</button>
+      <span class="n" id="sn">1</span>
+      <div class="slot" id="slot"><button class="btn" id="sp" aria-label="Plus de stickers">+</button></div>
+    </div>
+  </div>
+  <div class="row">
+    <div><div class="lbl">Gros câlins</div><div class="items" id="hi"></div></div>
+    <div class="ctrl">
+      <span class="n" id="hn">1</span>
+      <button class="btn" id="hp" aria-label="5 câlins de plus">+5</button>
+    </div>
+  </div>
+  <div id="msg"></div>
 
-<div class="toolbar">
-<div class="filters" id="filters">
-<button class="filter active" data-filter="all">Tout</button>
-<button class="filter" data-filter="todo">À faire</button>
-<button class="filter" data-filter="doing">En cours</button>
-<button class="filter" data-filter="done">Terminées</button>
-<button class="filter" data-filter="Soso">Soso</button>
-<button class="filter" data-filter="Dev 2">Dev 2</button>
-</div>
-<div class="tools">
-<button class="btn" id="exportBtn">↓ Exporter</button>
-<button class="btn primary" id="addBtn">＋ Ajouter une tâche</button>
-</div>
-</div>
+  <h2>Article 3 : engagements</h2>
+  <p>En signant, <b id="a1">le fautif</b> reconnaît, et <b id="a2">le vexé</b> accepte de pardonner dès réception du paiement. Plus de rancune après le câlin, c’est la règle.</p>
 
-<div class="add-row hide" id="addRow">
-<input id="newTask" placeholder="Nouvelle tâche…">
-<select id="newOwner">
-<option>Soso</option>
-<option>Dev 2</option>
-<option>À attribuer</option>
-</select>
-<select id="newCategory">
-<option>Gameplay</option>
-<option>Map & environnement</option>
-<option>Ennemis</option>
-<option>Construction</option>
-<option>Interface</option>
-<option>Audio & finition</option>
-</select>
-<button class="btn primary" id="confirmAdd">Ajouter</button>
+  <h2>Signatures</h2>
+  <div class="sign">
+    <button class="sbtn" id="s1">✍️ Signer<br><small id="t1">le fautif</small></button>
+    <button class="sbtn" id="s2">✍️ Signer<br><small id="t2">le vexé</small></button>
+  </div>
+  <div id="done"></div>
+  <p class="foot" id="date"></p>
 </div>
-
-<section class="board" id="board"></section>
-<div class="footer">LE DERNIER FEU DE NOËL · DEVBOARD <span id="lastUpdate"></span></div>
-</main>
+</div>
 
 <script>
-const seed=[
-{category:'Map & environnement',icon:'🏔️',tasks:[
-['Créer la map principale : forêt enneigée, camp et maison du Père Noël','Soso'],
-['Créer le camp central et ses zones principales','Dev 2'],
-['Créer le Grand Feu avec lumière et animation','Soso'],
-['Créer les zones de collecte de bois','À attribuer'],
-['Ajouter les décors : sapins, rochers, neige et débris du traîneau','Dev 2']
-]},
-{category:'Gameplay',icon:'🎮',tasks:[
-['Terminer le système d’inventaire','Soso'],
-['Créer le ramassage et le dépôt des cadeaux d’enfants','À attribuer'],
-['Créer l’ouverture des cadeaux du joueur','À attribuer'],
-['Créer la collecte et l’utilisation des ressources','À attribuer'],
-['Créer la vie du Grand Feu : baisse progressive et ravitaillement','Soso'],
-['Créer le cycle jour / nuit','Dev 2']
-]},
-{category:'Ennemis',icon:'❄️',tasks:[
-['Créer le premier Givré (modèle 3D)','Dev 2'],
-['Créer les animations du Givré','À attribuer'],
-['Créer son IA : repérer et rejoindre le Grand Feu','Soso'],
-['Créer les attaques contre le feu','À attribuer'],
-['Créer les vagues et leur difficulté progressive','À attribuer']
-]},
-{category:'Construction',icon:'🛠️',tasks:[
-['Créer l’Établi de fabrication','À attribuer'],
-['Créer le système de placement des pièges et machines','À attribuer'],
-['Créer les câbles et le réseau électrique','À attribuer'],
-['Créer le marchand lutin et son interface','À attribuer'],
-['Créer les plans et améliorations','À attribuer']
-]},
-{category:'Interface',icon:'🧭',tasks:[
-['Créer le HUD : feu, jour/nuit et ressources','À attribuer'],
-['Finaliser l’interface de l’inventaire','Soso'],
-['Ajouter les retours visuels de la télécommande','À attribuer'],
-['Créer les écrans de victoire et de défaite','À attribuer']
-]},
-{category:'Audio & finition',icon:'✨',tasks:[
-['Ajouter les sons du Grand Feu et des interactions','À attribuer'],
-['Ajouter les ambiances de forêt et de nuit','À attribuer'],
-['Ajouter les effets météo et tempêtes de neige','À attribuer'],
-['Ajouter les effets visuels des ennemis et machines','À attribuer']
-]}
-];
+(function(){
+  var st=1,hg=1,LIM=2;
+  var $=function(i){return document.getElementById(i)};
+  var sp=$('sp'),slot=$('slot'),msg=$('msg');
+  var lines=['Eh non, pas si vite 😏','Trop de stickers, le bouton a peur','Rattrape-moi si tu peux !','Un peu de mesure, voyons 🙈','Raté !'];
+  var li=0;
 
-let state={tasks:[],filter:'all'};
-const $=id=>document.getElementById(id);
-const KEY='dernier-feu-devboard-v1';
+  function render(){
+    $('si').textContent=st?new Array(st+1).join('🌟'):'—';
+    $('hi').textContent=hg?new Array(hg+1).join('🤗'):'—';
+    $('sn').textContent=st;$('hn').textContent=hg;
+    if(st<LIM) home();
+  }
+  function home(){
+    if(sp.classList.contains('run')){
+      sp.classList.remove('run');sp.style.left=sp.style.top='';
+    }
+  }
+  function dodge(e){
+    if(st<LIM) return;
+    if(e&&e.cancelable) e.preventDefault();
+    var w=window.innerWidth,h=window.innerHeight,s=52,m=14,x,y,t=0;
+    var cur=sp.getBoundingClientRect();
+    do{
+      x=m+Math.random()*(w-s-2*m);
+      y=m+Math.random()*(h-s-2*m);
+      t++;
+    }while(t<20&&Math.hypot(x-cur.left,y-cur.top)<130);
+    sp.classList.add('run');
+    sp.style.left=x+'px';sp.style.top=y+'px';
+    msg.textContent=lines[li++%lines.length];
+  }
+  // Se déplace dès que le doigt ou la souris approche, avant que le clic existe
+  ['touchstart','pointerdown','pointerenter','mousedown'].forEach(function(ev){
+    sp.addEventListener(ev,dodge,{passive:false});
+  });
+  sp.addEventListener('click',function(e){
+    if(st>=LIM){e.preventDefault();dodge(e);return;}
+    st++;msg.textContent=st>=LIM?'Ok, ça suffit : le bouton se sauve maintenant 😈':'';
+    render();
+    if(st>=LIM){ // au 2e sticker, il se met tout de suite à fuir
+      var r=slot.getBoundingClientRect();
+      sp.classList.add('run');sp.style.left=r.left+'px';sp.style.top=r.top+'px';
+      setTimeout(function(){dodge()},350);
+    }
+  });
+  window.addEventListener('resize',function(){if(sp.classList.contains('run'))dodge()});
 
-function init(){
-try{
-const shared=location.hash.startsWith('#data=')
-?JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(6)))))
-:null;
-const saved=JSON.parse(localStorage.getItem(KEY));
+  $('sm').onclick=function(){if(st>0){st--;msg.textContent=st<LIM?'Bouton calmé, tu peux rajouter 🌟':'';render()}};
+  $('hp').onclick=function(){if(hg<100){hg+=5;render()}};
 
-if(shared&&Array.isArray(shared.tasks)){
-state.tasks=shared.tasks;
-localStorage.setItem(KEY,JSON.stringify({tasks:state.tasks}));
-history.replaceState(null,'',location.pathname+location.search);
-}else if(saved?.tasks?.length){
-state.tasks=saved.tasks;
-}else{
-resetSeed();
-}
-}catch{
-resetSeed();
-}
-render();
-}
+  function names(){
+    var a=$('n1').value.trim()||'le fautif',b=$('n2').value.trim()||'le vexé';
+    $('a1').textContent=a;$('a2').textContent=b;$('t1').textContent=a;$('t2').textContent=b;
+    return [a,b];
+  }
+  $('n1').oninput=$('n2').oninput=names;
 
-function resetSeed(){
-state.tasks=seed.flatMap((g,gi)=>
-g.tasks.map((t,i)=>({
-id:`${gi}-${i}`,
-category:g.category,
-icon:g.icon,
-name:t[0],
-owner:t[1],
-status:'todo'
-}))
-);
-}
+  var sg=[false,false];
+  function sign(i){
+    sg[i]=!sg[i];
+    $('s'+(i+1)).classList.toggle('ok',sg[i]);
+    var n=names(),d=$('done');
+    if(sg[0]&&sg[1]){
+      d.style.display='block';
+      d.textContent='🎉 Contrat valide ! '+n[0]+' doit '+st+' sticker'+(st>1?'s':'')+' et '+hg+' câlin'+(hg>1?'s':'')+' à '+n[1]+'. Pardon accordé.';
+    }else d.style.display='none';
+  }
+  $('s1').onclick=function(){sign(0)};
+  $('s2').onclick=function(){sign(1)};
 
-function save(){
-localStorage.setItem(KEY,JSON.stringify({tasks:state.tasks}));
-$('lastUpdate').textContent='· Mis à jour à '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-render();
-}
-
-function render(){
-const total=state.tasks.length;
-const done=state.tasks.filter(t=>t.status==='done').length;
-const pct=total?Math.round(done/total*100):0;
-
-$('progressCount').textContent=`${done} / ${total}`;
-$('percentLabel').textContent=pct+' %';
-$('progressBar').style.width=pct+'%';
-$('doneCount').textContent=done;
-$('todoCount').textContent=total-done;
-
-const groups=[...new Set(state.tasks.map(t=>t.category))];
-
-$('board').innerHTML=groups.map(cat=>{
-const items=state.tasks.filter(t=>t.category===cat).filter(t=>{
-const f=state.filter;
-return f==='all'||
-(f==='todo'&&t.status==='todo')||
-(f==='doing'&&t.status==='doing')||
-(f==='done'&&t.status==='done')||
-t.owner===f;
-});
-
-const all=state.tasks.filter(t=>t.category===cat);
-if(!items.length)return '';
-
-const icon=all[0]?.icon||'📌';
-
-return `<article class="section">
-<div class="section-head">
-<div class="section-title">
-<div class="section-icon">${icon}</div>
-<h3>${cat}</h3>
-</div>
-<span class="count">${all.filter(t=>t.status==='done').length}/${all.length}</span>
-</div>
-<div class="task-list">
-${items.map(t=>`
-<div class="task ${t.status==='done'?'done':''}">
-<input type="checkbox" aria-label="Terminer ${escapeHtml(t.name)}" ${t.status==='done'?'checked':''} data-check="${t.id}">
-<div>
-<div class="task-name">${escapeHtml(t.name)}</div>
-<div class="task-meta">
-<span class="tag ${t.owner==='Soso'?'soso':t.owner==='Dev 2'?'dev':''}">${escapeHtml(t.owner)}</span>
-<select class="tag" data-status="${t.id}" aria-label="Statut" style="border:0">
-<option value="todo" ${t.status==='todo'?'selected':''}>À faire</option>
-<option value="doing" ${t.status==='doing'?'selected':''}>En cours</option>
-<option value="done" ${t.status==='done'?'selected':''}>Terminé</option>
-</select>
-</div>
-</div>
-<button class="delete" data-delete="${t.id}" title="Supprimer">×</button>
-</div>`).join('')}
-</div>
-</article>`;
-}).join('')||'<div class="empty">Aucune tâche dans ce filtre.</div>';
-
-document.querySelectorAll('[data-check]').forEach(el=>
-el.addEventListener('change',()=>{
-const t=state.tasks.find(x=>x.id===el.dataset.check);
-if(t){
-t.status=el.checked?'done':'todo';
-save();
-}
-})
-);
-
-document.querySelectorAll('[data-status]').forEach(el=>
-el.addEventListener('change',()=>{
-const t=state.tasks.find(x=>x.id===el.dataset.status);
-if(t){
-t.status=el.value;
-save();
-}
-})
-);
-
-document.querySelectorAll('[data-delete]').forEach(el=>
-el.addEventListener('click',()=>{
-if(confirm('Supprimer cette tâche ?')){
-state.tasks=state.tasks.filter(t=>t.id!==el.dataset.delete);
-save();
-}
-})
-);
-}
-
-function escapeHtml(s){
-return String(s).replace(/[&<>"']/g,c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
-}[c]));
-}
-
-$('filters').addEventListener('click',e=>{
-const b=e.target.closest('[data-filter]');
-if(!b)return;
-state.filter=b.dataset.filter;
-document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));
-render();
-});
-
-$('addBtn').onclick=()=>$('addRow').classList.toggle('hide');
-
-$('confirmAdd').onclick=()=>{
-const name=$('newTask').value.trim();
-if(!name)return;
-
-const cat=$('newCategory').value;
-const icons={
-'Gameplay':'🎮',
-'Map & environnement':'🏔️',
-'Ennemis':'❄️',
-'Construction':'🛠️',
-'Interface':'🧭',
-'Audio & finition':'✨'
-};
-
-state.tasks.push({
-id:'custom-'+Date.now(),
-category:cat,
-icon:icons[cat]||'📌',
-name,
-owner:$('newOwner').value,
-status:'todo'
-});
-
-$('newTask').value='';
-$('addRow').classList.add('hide');
-save();
-};
-
-$('newTask').addEventListener('keydown',e=>{
-if(e.key==='Enter')$('confirmAdd').click();
-});
-
-$('exportBtn').onclick=()=>{
-const blob=new Blob([JSON.stringify(state.tasks,null,2)],{type:'application/json'});
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download='dernier-feu-checklist.json';
-a.click();
-URL.revokeObjectURL(a.href);
-};
-
-$('shareBtn').onclick=async()=>{
-try{
-const payload=btoa(unescape(encodeURIComponent(JSON.stringify({tasks:state.tasks}))));
-const link=location.href.split('#')[0]+'#data='+payload;
-await navigator.clipboard.writeText(link);
-$('shareBtn').textContent='Lien copié ✓';
-$('syncText').textContent='Lien prêt à partager';
-setTimeout(()=>$('shareBtn').textContent="↗ Partager l'avancement",2200);
-}catch{
-$('shareBtn').textContent='Copie indisponible';
-}
-};
-
-init();
+  $('date').textContent='Fait le '+new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})+', valable pour toujours (ou jusqu’à la prochaine bêtise).';
+  render();names();
+  sg[0]=true;$('s1').classList.add('ok');
+})();
 </script>
 </body>
 </html>
